@@ -1,0 +1,132 @@
+body {
+    background-color: rgb(66, 66, 66);
+}
+.error{
+    color: rgb(243, 70, 70);
+}
+.container{
+    position: relative;
+    width: 100%;
+    vertical-align: middle;
+    text-align: center;
+    margin-top: 8%;
+}  
+.head{
+    font-size: 30px;
+    font-weight: 900;
+    text-align: center;
+}
+.input input{
+    position: relative;
+    display: block;
+    margin: 3% auto;
+    padding: 1%;
+    font-size: 20px;    
+    align-content: center;
+}
+.input .birth_date, .input select{
+    position: relative;
+    display: block;
+    margin: 3% auto;
+    padding: 1% 4.3%;
+    font-size: 20px;    
+    align-content: center;
+}
+.input select{
+    padding: 1% 6.8%;
+}
+.txt{
+    font-size: 20px;
+    margin-left: 2%;
+}
+.a_register{
+    text-decoration: none;
+    color: rgb(141, 135, 135);
+}
+.a_register:hover{
+    color: rgb(243, 70, 70);
+}
+.login, .signup{
+    position: absolute;
+    display: inline;
+    font-size: larger;
+    margin: 4% -10%;
+    padding: 1% 8%;
+    background-color: grey;
+}
+.signup{
+    margin: 2% -10.5%;  
+}
+.login:hover, .signup:hover{    
+    background-color: black;
+    color: grey;
+}
+.sort{
+    margin-left: 5%;
+}
+.main{  
+    text-align: center;
+    font-size: large;
+    margin-top: 10%;
+}
+.inner-main{
+    border: 1px solid grey;
+    background-color: rgb(163, 163, 163);
+    width: 86%; 
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+.inner-main div{
+    border-right: 1px solid grey;
+    padding: 0.8%;
+}
+.id{
+    width: 4%;
+}
+.username{
+    width: 19%;
+}
+.profile_pic{
+    width: 11%;
+}
+.download_pic{
+    width: 11.3%;
+}
+.email_data{
+    width: 32%;
+}
+.phone_num{
+    width: 14%;
+}
+.birth_date_data{
+    width: 14%;
+}
+.role{
+    width: 10%;
+}
+.logout_div{
+    margin: 3% 7%;
+}
+.search, .page, .delete{
+    margin: 3% 5%;
+}
+#search, .select{
+    font-size: larger;
+}
+.checkbox{
+    width: 2.8%;
+}
+.edit{
+    width: 6%;
+}
+#profile_pic{
+    margin-left: 38%;
+}
+.logout{
+    margin-left: 1%;
+}
+.pic{
+    margin-top: 5%;
+    text-align: center;
+}
