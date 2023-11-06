@@ -12,6 +12,12 @@
         case 'update':
             require "./controller/user_update.php";
             break;
+        case 'event_add':
+            require './controller/user_event_booking.php';
+            break;
+        case 'event_update':
+            require './controller/user_event_update.php';
+            break;
         case 'home':
             require "./controller/home.php";
             break;

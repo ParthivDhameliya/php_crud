@@ -49,7 +49,18 @@
 .edit{
     width: 6%;
 }
+.delete {
+    width: 8%;
+}
 .pic{
     margin-top: 5%;
     text-align: center;
+}
+
+.event_desc {
+    width: 32%;
+}
+
+.ticket_price {
+    width: 11%;
 }

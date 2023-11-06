@@ -3,15 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/html/curd/model/database_login.php</file>
-            <file>file:/var/www/html/curd/view/signup.php</file>
-            <file>file:/var/www/html/curd/index.php</file>
-            <file>file:/var/www/html/curd/controller/user_signup.php</file>
-            <file>file:/var/www/html/curd/view/update.php</file>
-            <file>file:/var/www/html/curd/model/database_signup.php</file>
             <file>file:/var/www/html/curd/view/home.php</file>
-            <file>file:/var/www/html/curd/controller/user_login.php</file>
-            <file>file:/var/www/html/curd/css/style.css</file>
             <file>file:/var/www/html/curd/model/database_home.php</file>
         </group>
     </open-files>

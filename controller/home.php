@@ -3,8 +3,12 @@
         $error = "Please, login first!";
         header("Location: http://localhost/curd/?page=login&error=$error");
     }
+    if(isset($_POST['event_add'])){
+        header("Location: http://localhost/curd/?page=event_add");
+    }
+    
     switch ($action) {
-        case 'data':
+        case 'data': 
             require "./model/database_home.php"; 
             require "./view/home.php";
             break;
@@ -16,4 +20,5 @@
             require "./model/database_download_pic.php";
             break;
     } 
-?>
+
+    

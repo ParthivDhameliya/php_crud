@@ -5,20 +5,21 @@
     $result = $conn -> query($sql1);
     while ($row = $result -> fetch_assoc()) {
         if ($row['Username'] === $username) {
-            $_SESSION['login'] = 0;
             $error = "This username already exists!";
         } elseif ($row['Email'] === $email) {
-            $_SESSION['login'] = 0;
             $error = "This email address already exists!";
         }  
-        $_SESSION['login'] = 0;
-        header("Location: http://localhost/curd/?page=signup&id=$id&error=$error");
+        header("Location: http://localhost/curd/?page=signup&error=$error");
     }  
     if ($conn -> query($sql) === TRUE) {
         $_SESSION['login'] = 1;
-        header("Location: http://localhost/curd/?page=home&role=$role");
+        $_SESSION['username'] = $username;
+        $_SESSION['email'] = $email;
+        $_SESSION['role'] = $role;
+        $_SESSION['id'] = $row['ID'];
+        $_SESSION['content'] = "people_list";
+        header("Location: http://localhost/curd/?page=home");
     } else {
         echo "<h1><center>error occured</center></h1>";
-    }
+    } 
     $conn -> close();
-?>

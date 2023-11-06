@@ -4,7 +4,6 @@
     $result = $conn -> query($sql);
     $row = $result -> fetch_assoc();
     if (empty($row['Username']) || $row['Username'] !== $username) {
-        $_SESSION['login'] = 0;
         $error = "Username is incorrect!";
         header("Location: http://localhost/curd/?page=login&error=$error");
     } else {
@@ -12,14 +11,15 @@
         $varify_pass = password_verify($password, $pass);
         if ($varify_pass === TRUE) {
             $_SESSION['login'] = 1;
-            $role = $row['Role'];
-            $id = $row['ID'];
-            header("Location: http://localhost/curd/?page=home&role=$role&id=$id");
-        } else {
-            $_SESSION['login'] = 0;
+            $_SESSION['username'] = $username;
+            $_SESSION['email'] = $row['Email'];
+            $_SESSION['role'] = $row['Role'];
+            $_SESSION['id'] = $row['ID'];
+            $_SESSION['content'] = "people_list";
+            header("Location: http://localhost/curd/?page=home");
+        } else { 
             $error = "Username or password incorrect!";
             header("Location: http://localhost/curd/?page=login&error=$error");
         }
     }
     $conn -> close();   
-?>
