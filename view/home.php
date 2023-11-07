@@ -86,7 +86,7 @@
                     <button type="submit" class="btn btn-secondary my-3" name="content_submit">View</button>                    
                 </div>
                 <?php if($_SESSION['content'] === "people_list" || !isset($_SESSION['content'])) { 
-                        if(mysqli_num_rows($result) > 0) { ?>
+                        if(mysqli_num_rows($result) > 0) {?>
                     <div class="main my-5">
                             <div class="inner-main">
                                 <div class="id">ID</div>
@@ -148,8 +148,8 @@
             <?php } ?>
 
             <?php if ($_SESSION['role'] === "user") { ?>
-            <form action="" method="post">
-                <button type="submit" class="btn btn-success offset-1 mt-5" name="event_add">Add Event</button>
+                <form action="" method="post">
+                    <button type="submit" class="btn btn-success offset-1 mt-5" name="event_add">Add Event</button>
             <?php if(mysqli_num_rows($event_result) > 0) { ?>
                 <div class="main my-5">
                     <div class="inner-main">
@@ -198,30 +198,35 @@
                 </div>
             </form>
         </div>
+        <!--page numbers-->
         <div class="col-sm-6 my-3">
+            <ul class="pagination">
             <?php for($i=1;$i<=$num_pages;$i++) { ?>
                 <li class="page-item" id="page<?php echo $i;?>" onclick="pagination(<?php echo $i;?>,this.id)"><a class="page-link" href="javascript:void(0)"><?php echo $i;?></a></li>
             <?php } ?> 
+            </ul>
         </div>
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script>
+    function pagination(pagenumber, id) {
+    $(".page-item").removeClass('active');
 
-function pagination(pagenumber,id) {
-        $(".page-item").removeClass('active');
+    $("#"+id).addClass('active');
+    
+    let xhr = new XMLHttpRequest();
 
-        $("#"+id).addClass('active');
-
-        $.ajax({
-            url:'data.php',
-            method:'POST',
-            data:{'page':pagenumber},
-            success:function(response)
-            {
-                $("#content").html(response);
-            }
-        });
+    xhr.onreadystatechange = function () {
+        if (this.ready === 4 && this.status === 200 ) {
+            var data = this.responseText;
+            <?php ?>
+        }
+    };
+    
+    xhr.open('POST', '/curd/model/database_home.php', true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send("page="+pagenumber);
 }
 </script>
 <?php require_once 'footer.php'; 

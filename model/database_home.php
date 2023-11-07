@@ -174,32 +174,29 @@
     
     $num_rows = 1;
     $num_pages = 1;
-//    $start=($_POST['page']-1)*$limit;
-//    if (($_POST['page'] - 1) < 0) {
-//        $start = 0;
-//    }
-
-//    $limit_sql=" LIMIT $start,$limit";
-//    
-//    if ($_SESSION['role'] === "user") {
-////        $result1 = $conn ->query($event_sort);
-//        $num_rows = mysqli_num_rows($event_result);
-//        $num_pages = ceil($num_rows/$limit);
-//        $event_page = $event_sort . $limit_sql;
-//        $event_result = $conn -> query($event_page);
-//    } elseif ($_SESSION['content'] === "events_by_people") {
-////        $result2 = $conn ->query($event_by_people_sort);
-//        $num_rows = mysqli_num_rows($event_by_people_result);
-//        $num_pages = ceil($num_rows/$limit);
-//        $event_by_people_page = $event_by_people_sort . $limit_sql;
-//        $event_by_people_result = $conn ->query($event_by_people_page);
-//    } elseif ($_SESSION['content'] === "people_list") {
-////        $result3 = $conn -> query($sort);
-//        $num_rows = mysqli_num_rows($result);
-//        $num_pages = ceil($num_rows/$limit);
-//        $result_page = $sort . $limit_sql;
-//        $result = $conn ->query($result_page);
-//    }
+    $start=($_POST['page']-1)*$limit;
+    if (($_POST['page'] - 1) < 0) {
+        $start = 0;
+    }
+    
+    $limit_sql=" LIMIT $start,$limit";
+    
+    if ($_SESSION['role'] === "user") {
+        $num_rows = mysqli_num_rows($event_result);
+        $num_pages = ceil($num_rows/$limit);
+        $event_page = $event_sort . $limit_sql;
+        $event_result = $conn -> query($event_page);
+    } elseif ($_SESSION['content'] === "events_by_people") {
+        $num_rows = mysqli_num_rows($event_by_people_result);
+        $num_pages = ceil($num_rows/$limit);
+        $event_by_people_page = $event_by_people_sort . $limit_sql;
+        $event_by_people_result = $conn ->query($event_by_people_page);
+    } elseif ($_SESSION['content'] === "people_list") {
+        $num_rows = mysqli_num_rows($result);
+        $num_pages = ceil($num_rows/$limit);
+        $result_page = $sort . $limit_sql;
+        $result = $conn ->query($result_page);
+    }
     
     $conn -> close();
 ?>
