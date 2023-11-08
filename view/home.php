@@ -40,6 +40,16 @@
                                     <option value="Birthdate" name="Birthdate">Birth date</option>
                                     <option value="Total_events" name="Total_events">Total events</option>
                             <?php }
+                                if (($_SESSION['role'] === "admin" || $_SESSION['role'] === "manager") && $content === "events_list") { ?>
+                                    <option value="event_id" name="event_id">Event id</option>
+                                    <option value="event_name" name="event_name">Event name</option>
+                                    <option value="event_desc" name="event_desc">Event description</option>
+                                    <option value="event_city" name="event_city">Event city</option>
+                                    <option value="event_date" name="event_date">Event date</option>
+                                    <option value="ticket_price" name="ticket_price">Ticket price</option>
+                                    <option value="Username" name="Username">User name</option>
+                                    <option value="Role" name="Role">Role</option>                                    
+                            <?php }                            
                                 if($_SESSION['role'] === "user") { ?> 
                                     <option value="event_id" name="event_id">Event id</option>
                                     <option value="event_name" name="event_name">Event name</option>
@@ -81,12 +91,13 @@
             <form action="" method="post">
                 <div class="form-group col-sm-8 offset-2 mt-5 h3">
                     <label for="content">What do you want to see:</label><br>
-                    People list: <input type="radio" name="content" id="content" value="people_list" checked><br>
-                    Events organized by people: <input type="radio" name="content" id="content" value="events_by_people"><br>
+                    People list: <input type="radio" name="content" id="content" value="people_list" <?php echo ($_SESSION['content'] === "people_list" || !isset($_SESSION['content'])) ? "checked" : "" ?>><br>
+                    Events list: <input type="radio" name="content" id="content" value="events_list" <?php echo ($_SESSION['content'] === "events_list") ? "checked" : "" ?>><br>
+                    Events organized by people: <input type="radio" name="content" id="content" value="events_by_people" <?php echo ($_SESSION['content'] === "events_by_people") ? "checked" : "" ?>><br>
                     <button type="submit" class="btn btn-secondary my-3" name="content_submit">View</button>                    
                 </div>
                 <?php if($_SESSION['content'] === "people_list" || !isset($_SESSION['content'])) { 
-                        if(mysqli_num_rows($result) > 0) {?>
+                        if(mysqli_num_rows($result) > 0) { ?>
                     <div class="main my-5">
                             <div class="inner-main">
                                 <div class="id">ID</div>
@@ -117,7 +128,7 @@
                             <div class="h3">No Data Available</div>
                         <?php } ?>
                     </div>
-                <?php } elseif ($_SESSION['content'] === "events_by_people" || $_SESSION['admin_to_user'] === "user") { 
+                <?php } elseif ($_SESSION['content'] === "events_by_people") { 
                             if(mysqli_num_rows($event_by_people_result) > 0) { ?>
                     <div class="main my-5">
                             <div class="inner-main">
@@ -143,9 +154,39 @@
                             <div class="h3">No Data Available</div>
                         <?php } ?>
                     </div>                    
-                <?php } ?>
+                <?php } elseif ($_SESSION['content'] === "events_list") { 
+                            if(mysqli_num_rows($events_list) > 0) { ?>
+                    <div class="main my-5">
+                            <div class="inner-main">
+                                <div class="id">ID</div>
+                                <div class="username">Event name</div>
+                                <div class="email_data">Event_desc</div>
+                                <div class="role">Event city</div>
+                                <div class="birth_date_data">Event date</div>
+                                <div class="role">Ticket price</div>
+                                <div class="username">Username</div>
+                                <div class="role">Role</div>
+                            </div>
+                         
+                        <?php while ($row = $events_list -> fetch_assoc()) { ?>
+                            <div class="inner-main">
+                                <div class="id"><?=$row["event_id"] ?></div>
+                                <div class="username"><?=$row["event_name"] ?></div>
+                                <div class="email_data"><?=$row["event_desc"] ?></div>
+                                <div class="role"><?=$row['event_city'] ?></div>
+                                <div class="birth_date_data"><?=$row["event_date"] ?></div>
+                                <div class="role"><?=$row["ticket_price"] ?></div>
+                                <div class="username"><?=$row["Username"] ?></div>
+                                <div class="role"><?=$row["Role"] ?></div>
+                            </div>
+                        <?php } 
+                            } else { ?>
+                            <div class="h3">No Data Available</div>
+                        <?php } ?>
+                    </div>  
             </form>
-            <?php } ?>
+            <?php   } 
+                } ?>
 
             <?php if ($_SESSION['role'] === "user") { ?>
                 <form action="" method="post">
@@ -184,49 +225,5 @@
             <?php } ?>
         </div>
     </div> 
-    <div class="row offset-1 mb-5">
-        <div class="col-sm-6">
-            <!--pagination-->
-            <form action="" method="post" class="my-3">
-                <div class="page">
-                    <span class="txt form-label"> page : </span><select name="select_page" id="select" class="select">
-                                                        <option value='5'>5</option>
-                                                        <option value='10'>10</option>
-                                                        <option value='15'>15</option>
-                                                    </select>
-                    <button type="submit" class="btn btn-secondary ms-3" name="records_per_page">submit</button>
-                </div>
-            </form>
-        </div>
-        <!--page numbers-->
-        <div class="col-sm-6 my-3">
-            <ul class="pagination">
-            <?php for($i=1;$i<=$num_pages;$i++) { ?>
-                <li class="page-item" id="page<?php echo $i;?>" onclick="pagination(<?php echo $i;?>,this.id)"><a class="page-link" href="javascript:void(0)"><?php echo $i;?></a></li>
-            <?php } ?> 
-            </ul>
-        </div>
-    </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<script>
-    function pagination(pagenumber, id) {
-    $(".page-item").removeClass('active');
-
-    $("#"+id).addClass('active');
-    
-    let xhr = new XMLHttpRequest();
-
-    xhr.onreadystatechange = function () {
-        if (this.ready === 4 && this.status === 200 ) {
-            var data = this.responseText;
-            <?php ?>
-        }
-    };
-    
-    xhr.open('POST', '/curd/model/database_home.php', true);
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.send("page="+pagenumber);
-}
-</script>
 <?php require_once 'footer.php'; 

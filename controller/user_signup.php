@@ -102,7 +102,6 @@
     } 
     $error = filter_input(INPUT_GET, 'error');
     if (isset($error)) {
-        $_SESSION['login'] = 0;
         echo "<center><h1>" . $error ."</center></h1>";
     }
     require_once './view/signup.php';

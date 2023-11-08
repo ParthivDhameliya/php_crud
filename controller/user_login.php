@@ -27,7 +27,6 @@
         }
     }
     if (isset($_GET['error'])) {
-        $_SESSION['login'] = 0;
         echo "<center><h1>" . $_GET['error'] ."</center></h1>";
     }
     require_once "./view/login.php";

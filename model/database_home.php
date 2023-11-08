@@ -9,6 +9,12 @@
     $events_sql = "SELECT * FROM `events` WHERE organizer_name='$username'";
     $event_result = $conn -> query($events_sql);
     
+    $events_list_sql = "SELECT e.event_id, e.event_name, e.event_desc, e.event_city, e.event_date, e.ticket_price, d.Username, d.Role
+                        FROM data d, events e
+                        WHERE d.Username = e.organizer_name AND
+                              d.Email = e.organizer_email";
+    $events_list = $conn -> query($events_list_sql);
+    
     $event_by_people_sql_start = "SELECT d.ID, d.Username, d.Email, d.Role, d.Birthdate, COUNT(e.event_name) AS 'Total_events'
                             FROM data d, events e
                             WHERE d.Username = e.organizer_name AND
@@ -29,7 +35,6 @@
         $_SESSION['email'] = "";
         $_SESSION['role'] = "";
         $_SESSION['id'] = "";
-        $_SESSION['admin_to_user'] = "";
         $_SESSION['content'] = "";
         header("Location: http://localhost/curd/?page=login");
     }
@@ -79,18 +84,25 @@
         }
     }
 
-    $is_events_sorted = $is_people_sorted = $is_event_by_people_sorted = 0;
+    $is_events_sorted = $is_people_sorted = $is_event_by_people_sorted = $is_events_list_sorted = 0;
     
 //    search
     $search_value = @$_POST['search']; 
+    
     $search_query = " WHERE (`ID` LIKE '%$search_value%' OR `Username` LIKE '%$search_value%' OR `Email` LIKE '%$search_value%' OR `Birthdate` LIKE '%$search_value%' OR `Role` LIKE '%$search_value%')";
-    $event_search_query = " AND `event_id` LIKE '%$search_value%' OR `event_name` LIKE '%$search_value%' OR `event_desc` LIKE '%$search_value%' OR `event_date` LIKE '%$search_value%' OR "
-                        . "`event_city` LIKE '%$search_value%' OR `ticket_price` LIKE '%$search_value%' OR 'date_created' LIKE '%$search_value%'";
+    
+    $event_search_query = " AND (`event_id` LIKE '%$search_value%' OR `event_name` LIKE '%$search_value%' OR `event_desc` LIKE '%$search_value%' OR `event_date` LIKE '%$search_value%' OR "
+                        . "`event_city` LIKE '%$search_value%' OR `ticket_price` LIKE '%$search_value%' OR 'date_created' LIKE '%$search_value%')";
+    
+    $events_list_search_query = " AND (e.event_id LIKE '%$search_value%' OR e.event_name LIKE '%$search_value%' OR e.event_desc LIKE '%$search_value%' OR e.event_date LIKE '%$search_value%' OR "
+                        . "e.event_city LIKE '%$search_value%' OR e.ticket_price LIKE '%$search_value%' OR d.Username LIKE '%$search_value%' OR d.Role LIKE '%$search_value%')";
+    
     $event_by_people_search_query = " AND (`ID` LIKE '%$search_value%' OR `Username` LIKE '%$search_value%' OR `Email` LIKE '%$search_value%' OR "
                                     . "`Birthdate` LIKE '%$search_value%' OR `Role` LIKE '%$search_value%')";
     
     $search = $sql . $search_query;
     $event_search = $events_sql . $event_search_query;
+    $events_list_search = $events_list_sql . $events_list_search_query;
     $event_by_people_search = $event_by_people_sql_start . $event_by_people_search_query . $event_by_people_sql_end;
     
 //    sorting
@@ -106,6 +118,7 @@
     $sort = $search . $sort_query;
     $event_sort = $event_search . $sort_query;
     $event_by_people_sort = $event_by_people_sql . $sort_query;
+    $events_list_sort = $events_list_search . $sort_query;
     
     if (isset($_POST['search_btn'])) {
         if (!empty($_POST['search'])) { 
@@ -121,9 +134,15 @@
             }
             if($_SESSION['content'] === "events_by_people") {
                 if ($is_event_by_people_sorted == 1) {
-                    $event_by_people_sql = $event_by_people_sql . $sort_query;
+                    $event_by_people_search = $event_by_people_search . $sort_query;
                 }
                 $event_by_people_result = $conn -> query($event_by_people_search);
+            }
+            if($_SESSION['content'] === "events_list") {
+                if ($is_events_list_sorted == 1) {
+                    $events_list_search = $events_list_search . $sort_query;
+                }
+                $events_list = $conn -> query($events_list_search);
             }
         }
     }
@@ -150,52 +169,13 @@
                 $result = $conn -> query($sort);
                 break;
         }
-    }
-    
-    
-//    pagination
-    
-//    @$page = $_POST['page'];
-//    if ($page > 0) {
-//        $result_per_page = $_POST['select_page'];
-//        $number_of_results = $result -> num_rows;
-//        $number_of_pages = ceil($number_of_results/$result_per_page);
-//        $page_result = ($page - 1) * $result_per_page;
-//        $page_limit = " LIMIT ". $page_result.",". $result_per_page;
-//        $limit = $sort . $page_limit;
-//        if (isset($_POST['page_btn'])) {
-//            $result = $conn -> query($limit);
-//        }
-//    }
-    $limit = 5;
-    if (isset($_POST['records_per_page'])) {
-        $limit = $_POST['select_page'];
-    }
-    
-    $num_rows = 1;
-    $num_pages = 1;
-    $start=($_POST['page']-1)*$limit;
-    if (($_POST['page'] - 1) < 0) {
-        $start = 0;
-    }
-    
-    $limit_sql=" LIMIT $start,$limit";
-    
-    if ($_SESSION['role'] === "user") {
-        $num_rows = mysqli_num_rows($event_result);
-        $num_pages = ceil($num_rows/$limit);
-        $event_page = $event_sort . $limit_sql;
-        $event_result = $conn -> query($event_page);
-    } elseif ($_SESSION['content'] === "events_by_people") {
-        $num_rows = mysqli_num_rows($event_by_people_result);
-        $num_pages = ceil($num_rows/$limit);
-        $event_by_people_page = $event_by_people_sort . $limit_sql;
-        $event_by_people_result = $conn ->query($event_by_people_page);
-    } elseif ($_SESSION['content'] === "people_list") {
-        $num_rows = mysqli_num_rows($result);
-        $num_pages = ceil($num_rows/$limit);
-        $result_page = $sort . $limit_sql;
-        $result = $conn ->query($result_page);
+    } elseif ($_SESSION['content'] === "events_list") {
+        switch ($role) {
+            case 'event_id': case 'event_name': case 'event_date': case 'event_city': case 'ticket_price': case 'Username': case 'Role':
+                $is_events_list_sorted = 1;
+                $events_list = $conn -> query($events_list_sort);
+                break;
+        }
     }
     
     $conn -> close();

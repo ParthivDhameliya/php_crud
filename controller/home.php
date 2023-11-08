@@ -1,5 +1,5 @@
 <?php
-    if ($_SESSION['login'] === 0) {
+    if ($_SESSION['login'] === 0 || !isset($_SESSION['login'])) {
         $error = "Please, login first!";
         header("Location: http://localhost/curd/?page=login&error=$error");
     }
