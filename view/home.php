@@ -111,7 +111,8 @@
                                 <div class="delete"></div>
                             </div>
                          
-                        <?php while ($row = $result -> fetch_assoc()) { ?>
+                        <?php while ($row = $result -> fetch_assoc()) { 
+                            if($row['Username'] !== "admin" || $_SESSION['username'] == 'admin') { ?>
                             <div class="inner-main">
                                 <div class="id"><?=$row["ID"] ?></div>
                                 <div class="username"><?=$row["Username"] ?></div>
@@ -124,7 +125,8 @@
                                 <div class="delete"><button type="submit" class="btn btn-danger" value="<?= $row["ID"] ?>" name="delete" id="delete"">Delete</button></div>
                             </div>
                         <?php } 
-                            } else { ?>
+                            }
+                        } else { ?>
                             <div class="h3">No Data Available</div>
                         <?php } ?>
                     </div>
@@ -192,7 +194,7 @@
                 <form action="" method="post">
                     <button type="submit" class="btn btn-success offset-1 mt-5" name="event_add">Add Event</button>
             <?php if(mysqli_num_rows($event_result) > 0) { ?>
-                <div class="main my-5">
+                <div class="main my-5"> 
                     <div class="inner-main">
                         <div class="id">ID</div>
                         <div class="username">Event name</div>
@@ -214,7 +216,7 @@
                             <div class="ticket_price"><?=$event_row["ticket_price"] ?></div>
                             <div class="birth_date_data"><?=$event_row["date_created"] ?></div>
                             <div class="edit"><button type="submit" class="btn btn-warning" value="<?= $event_row["event_id"] ?>" name="event_edit">Edit</button></div>
-                            <div class="delete"><button type="submit" class="btn btn-danger" value="<?= $event_row["event_id"] ?>" name="event_delete" id="event_delete"">Delete</button></div>
+                            <div class="delete"><button type="submit" class="btn btn-danger" value="<?= $event_row["event_id"] ?>" name="event_delete" id="event_delete">Delete</button></div>
                         </div>
                     <?php } ?>
                 </div>

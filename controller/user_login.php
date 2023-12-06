@@ -1,5 +1,5 @@
 <?php
-    $username = $password = "";
+    $username = $password = $role = "";
     $usernameError = $passwordError = "";
 
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -20,6 +20,8 @@
                 $passwordError = "Your Password Must Contain At Least 8 Characters!";
             }
         }
+        
+        $role = $_POST['select'];
 
         if (empty($usernameError) && empty($passwordError)) {
             require "./model/database_login.php";
