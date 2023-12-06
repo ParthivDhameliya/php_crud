@@ -1,4 +1,5 @@
 <?php
+    $role = "user";
     $conn = new mysqli("localhost", "root", "letmein", "projectDB");
     $sql = "INSERT INTO `data`(`Username`, `profile_picture`, `Email`, `Birthdate`, `Role`, `Password`) VALUES ('$username','$profile_pic','$email','$birth_date','$role','$password')";  
     $sql1 = "SELECT * FROM `data` WHERE (Username = '$username' OR Email = '$email')";

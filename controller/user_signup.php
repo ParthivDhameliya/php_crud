@@ -3,8 +3,8 @@
     
     $file_dir = "/var/www/html/curd_img/";
     
-    $username = $profile_pic = $email = $birth_date = $role = $password = $re_password = "";
-    $usernameError = $profile_picError = $emailError = $mobile_numError = $birth_dateError = $passwordError = $re_passwordError = "";
+    $username = $profile_pic = $email = $birth_date = $password = $re_password = "";
+    $usernameError = $profile_picError = $emailError = $birth_dateError = $passwordError = $re_passwordError = "";
     
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
         
@@ -56,8 +56,6 @@
                 $birth_dateError = " Sorry, minimum $min_age years is required ";
             }
         }
-        
-        $role = filter_input(INPUT_POST, 'select');
 
         if (empty(filter_input(INPUT_POST, 'password'))) {
             $passwordError = " Password is required ";

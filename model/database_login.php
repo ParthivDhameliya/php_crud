@@ -9,7 +9,7 @@
     } else {
         $pass = $row['Password'];
         $varify_pass = password_verify($password, $pass);
-        if ($varify_pass === TRUE) {
+        if ($varify_pass === TRUE && $role == $row['Role']) {
             $_SESSION['login'] = 1;
             $_SESSION['username'] = $username;
             $_SESSION['email'] = $row['Email'];
